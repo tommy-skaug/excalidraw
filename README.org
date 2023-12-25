@@ -1,4 +1,17 @@
 #+TITLE: Excalibur Docker Image from Upstream
+#+DATE: 2023-12-26
+
+** Description
+
+Excalidraw is an open-source virtual hand-drawn style whiteboard that allows for collaborative 
+and end-to-end encrypted work. It offers a range of features including an infinite canvas-based 
+whiteboard, customizable hand-drawn style, dark mode, image support, shape libraries, localization 
+support, and export options to PNG, SVG, and clipboard. The Excalidraw.com app, which is hosted 
+offline and supports real-time collaboration, also features PWA support, end-to-end encryption, 
+local-first support, and shareable links. In the future, these features will be added as drop-in 
+plugins for the npm package. 
+
+** What this repo adds
 
 This workflow performs the following tasks:
 
@@ -9,7 +22,7 @@ This workflow performs the following tasks:
 4. Builds and pushes a Docker image to GHCR.
 5. Creates a new release if a new release is found.
 
-*Workflow Details*
+** Workflow Details
 
 **Trigger**
 
@@ -17,3 +30,7 @@ The workflow is triggered in the following scenarios:
 - Manually triggered using the "workflow_dispatch" event.
 - Push event on the "main" branch.
 - Every 24 hours
+
+** Licensing
+
+Excalidraw is released under the MIT license.
