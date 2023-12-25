@@ -8,7 +8,6 @@ on:
 
 env:
   UPSTREAM_REPO: "excalidraw/excalidraw"
-  IMAGE_NAME: "excalidraw"
 
 jobs:
   check-releases:
@@ -112,7 +111,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: ghcr.io/${{ github.repository }}/${{ env.IMAGE_NAME}}:${{ needs.check-releases.outputs.upstreamReleaseTag }}
+        tags: ghcr.io/${{ github.repository }}:${{ needs.check-releases.outputs.upstreamReleaseTag }}
 
   create-release:
     needs: [check-releases, sync-upstream, push-image]
