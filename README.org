@@ -1,4 +1,4 @@
-#+TITLE: Excalibur Docker Image from Upstream
+#+TITLE: Excalidraw Docker Image from Upstream
 #+DATE: 2023-12-26
 
 ** Description
@@ -15,7 +15,7 @@ plugins for the npm package.
 
 This workflow performs the following tasks:
 
-1. Checks for new releases in the Excalibur repository.
+1. Checks for new releases in the Excalidraw repository.
 2. Compares the latest release version in the upstream repository with the latest release 
    version in the local repository.
 3. Syncs the =src= branch with the upstream release tag.
