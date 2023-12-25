@@ -8,6 +8,7 @@ on:
 
 env:
   upstream_repo: "excalidraw/excalidraw"
+  local_repo: "{{ github.repository }}"
 
 jobs:
   check-releases:
@@ -18,21 +19,21 @@ jobs:
     - name: Fetch latest release version
       id: upstream-release
       run: |
-        upstream_release_tag=$(curl -sL https://api.github.com/repos/{{ env.upstream_repo }}/releases/latest | jq -r ".tag_name")
+        upstream_release_tag=$(curl -sL https://api.github.com/repos/$upstream_repo/releases/latest | jq -r ".tag_name")
         echo "upstream_release_tag=$upstream_release_tag" >> $GITHUB_OUTPUT
-
-    - name: Fetch latest local release version
-      id: local-release
-      run: |
-        local_release_tag=$(curl -sL https://api.github.com/repos/{{ github.repository }}/releases/latest | jq -r ".tag_name")
-        echo "local_release_tag=$local_release_tag" >> $GITHUB_OUTPUT
 
     - name: Fetch latest upstream release body
       id: upstream-release-body
       run: |
         echo 'upstream_release_body<<EOF' >> $GITHUB_OUTPUT
-        curl -sL https://api.github.com/repos/{{ .upstream_repo }}/releases/latest | jq -r ".body" >> $GITHUB_OUTPUT
+        curl -sL https://api.github.com/repos/$upstream_repo/releases/latest | jq -r ".body" >> $GITHUB_OUTPUT
         echo EOF >> $GITHUB_OUTPUT
+
+    - name: Fetch latest local release version
+      id: local-release
+      run: |
+        local_release_tag=$(curl -sL https://api.github.com/repos/$local_repo/releases/latest | jq -r ".tag_name")
+        echo "local_release_tag=$local_release_tag" >> $GITHUB_OUTPUT
 
     - name: Compare release versions
       if: steps.upstream-release.outputs.upstream_release_tag != steps.local-release.outputs.local_release_tag
