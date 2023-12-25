@@ -78,7 +78,6 @@ jobs:
     - name: Sync upstream changes
       run: |
         git remote add upstream https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ env.UPSTREAM_REPO }}
-        git branch src
         git pull upstream refs/tags/${{ needs.check-releases.outputs.upstreamReleaseTag }} --rebase
         git-filter-repo --path .github --invert-paths
         git push --set-upstream origin src --force
