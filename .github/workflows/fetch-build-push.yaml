@@ -1,0 +1,73 @@
+name: Update and Build Workflow
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+
+env:
+  # renovate: depName=github.com/excalidraw/excalidraw
+  EXCALIDRAW_VERSION: "v0.17.0"
+
+jobs:
+  sync-upstream:
+    name: Sync with upstream
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository }}
+        ref: src
+
+    - name: Pull upstream changes from Excalidraw
+      id: sync
+      uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
+      with:
+        target_sync_branch: src
+        target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+        target_branch_push_args: --force
+        upstream_sync_branch: ref/${{ env.EXCALIDRAW_VERSION }}
+        upstream_sync_repo: excalidraw/excalidraw
+        upstream_pull_args: '--ff-only --tags -s recursive -Xtheirs'
+        #git_config_pull_rebase: true
+
+  build-and-push:
+    needs: sync-upstream
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository }}
+        ref: src
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to ghcr
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push excalidraw image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ghcr.io/${{ github.repository }}/excalidraw:${{ env.EXCALIDRAW_VERSION }}
