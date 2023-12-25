@@ -1,0 +1,19 @@
+#+TITLE: Excalibur Docker Image from Upstream
+
+This workflow performs the following tasks:
+
+1. Checks for new releases in the Excalibur repository.
+2. Compares the latest release version in the upstream repository with the latest release 
+   version in the local repository.
+3. Syncs the =src= branch with the upstream release tag.
+4. Builds and pushes a Docker image to GHCR.
+5. Creates a new release if a new release is found.
+
+*Workflow Details*
+
+**Trigger**
+
+The workflow is triggered in the following scenarios:
+- Manually triggered using the "workflow_dispatch" event.
+- Push event on the "main" branch.
+- Every 24 hours

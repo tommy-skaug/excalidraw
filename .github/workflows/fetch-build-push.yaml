@@ -8,6 +8,7 @@ on:
 
 env:
   UPSTREAM_REPO: "excalidraw/excalidraw"
+  IMAGE_NAME: "excalidraw"
 
 jobs:
   check-releases:
@@ -95,6 +96,7 @@ jobs:
     - name: Remove dockerignore
       id: upstream-release
       run: rm .dockerignore
+      continue-on-error: true
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
