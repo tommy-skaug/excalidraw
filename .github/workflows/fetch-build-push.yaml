@@ -74,6 +74,7 @@ jobs:
       run: |
         git remote add upstream https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ env.UPSTREAM_REPO }}
         git pull upstream refs/tags/${{ needs.check-releases.outputs.upstreamReleaseTag }} --rebase
+        rm -r .github
         git push --set-upstream origin src --force
 
   push-image:
